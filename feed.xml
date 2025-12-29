@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rss version="2.0">
+    <channel>
+        <title>Wapuugotchi RSS</title>
+        <link>https://wapuugotchi.github.io/feed/</link>
+        <description>Automatisierte Updates und Checks als RSS Feed.</description>
+    </channel>
+</rss>
