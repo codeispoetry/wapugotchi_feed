@@ -29,13 +29,25 @@ type Entry struct {
 }
 
 type State struct {
-	WordPressLatest string `json:"wordpress_latest"`
+	WordPressLatestTitle   string `json:"wordpress_latest_title"`
+	WordPressLatestLink    string `json:"wordpress_latest_link"`
+	WordPressLatestPubDate string `json:"wordpress_latest_pub_date"`
 }
 
-type WordPressResponse struct {
-	Offers []struct {
-		Version string `json:"version"`
-	} `json:"offers"`
+type WordPressFeed struct {
+	Channel WordPressChannel `xml:"channel"`
+}
+
+type WordPressChannel struct {
+	Items []WordPressItem `xml:"item"`
+}
+
+type WordPressItem struct {
+	Title       string `xml:"title"`
+	Link        string `xml:"link"`
+	GUID        string `xml:"guid"`
+	PubDate     string `xml:"pubDate"`
+	Description string `xml:"description"`
 }
 
 type RSS struct {
@@ -90,14 +102,16 @@ func main() {
 		fatal(err)
 	}
 
-	if latest != "" && latest != state.WordPressLatest {
-		state.WordPressLatest = latest
+	if latest.Title != "" && latest.Title != state.WordPressLatestTitle {
+		state.WordPressLatestTitle = latest.Title
+		state.WordPressLatestLink = latest.Link
+		state.WordPressLatestPubDate = latest.PubDate
 		entries = append(entries, Entry{
-			ID:        fmt.Sprintf("wordpress-%s", latest),
-			Title:     fmt.Sprintf("WordPress %s verfuegbar", latest),
-			Link:      site.Link,
-			Content:   fmt.Sprintf("Neue WordPress Version %s wurde entdeckt.", latest),
-			CreatedAt: time.Now().UTC().Format(time.RFC3339),
+			ID:        pickEntryID(latest),
+			Title:     latest.Title,
+			Link:      latest.Link,
+			Content:   latest.Description,
+			CreatedAt: pickEntryTime(latest),
 		})
 	}
 
@@ -109,38 +123,38 @@ func main() {
 	}
 }
 
-func fetchLatestWordPress() (string, error) {
+func fetchLatestWordPress() (WordPressItem, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.wordpress.org/core/version-check/1.7/", nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://wordpress.org/news/category/releases/feed/", nil)
 	if err != nil {
-		return "", err
+		return WordPressItem{}, err
 	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return "", err
+		return WordPressItem{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return "", fmt.Errorf("wordpress api status: %s", resp.Status)
+		return WordPressItem{}, fmt.Errorf("wordpress api status: %s", resp.Status)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", err
+		return WordPressItem{}, err
 	}
 
-	var payload WordPressResponse
-	if err := json.Unmarshal(body, &payload); err != nil {
-		return "", err
+	var payload WordPressFeed
+	if err := xml.Unmarshal(body, &payload); err != nil {
+		return WordPressItem{}, err
 	}
-	if len(payload.Offers) == 0 {
-		return "", nil
+	if len(payload.Channel.Items) == 0 {
+		return WordPressItem{}, nil
 	}
-	return payload.Offers[0].Version, nil
+	return payload.Channel.Items[0], nil
 }
 
 func buildFeed(site Site, entries []Entry, outputPath string) error {
@@ -201,6 +215,32 @@ func parseTime(value string) (time.Time, error) {
 		return time.Parse(time.RFC3339, value)
 	}
 	return time.Parse(time.RFC3339, value)
+}
+
+func pickEntryID(item WordPressItem) string {
+	if strings.TrimSpace(item.GUID) != "" {
+		return strings.TrimSpace(item.GUID)
+	}
+	return fmt.Sprintf("wordpress-%d", time.Now().Unix())
+}
+
+func pickEntryTime(item WordPressItem) string {
+	parsed, err := parsePubDate(item.PubDate)
+	if err != nil {
+		return time.Now().UTC().Format(time.RFC3339)
+	}
+	return parsed.UTC().Format(time.RFC3339)
+}
+
+func parsePubDate(value string) (time.Time, error) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return time.Time{}, fmt.Errorf("empty pubDate")
+	}
+	if parsed, err := time.Parse(time.RFC1123Z, value); err == nil {
+		return parsed, nil
+	}
+	return time.Parse(time.RFC1123, value)
 }
 
 func readJSON[T any](path string, fallback T) T {
