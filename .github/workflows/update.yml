@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HUGGINGFACE_TOKEN: ${{ secrets.HUGGINGFACE_TOKEN }}
+      AI_PROVIDER: ${{ vars.AI_PROVIDER }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
