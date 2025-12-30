@@ -5,5 +5,12 @@
     <link>https://wapuugotchi.github.io/feed/</link>
     <description>Automatisierte Updates und Checks als RSS Feed.</description>
     <lastBuildDate>Tue, 02 Dec 2025 20:12:21 +0000</lastBuildDate>
+    <item>
+      <title>WordPress 6.9 “Gene”</title>
+      <link>https://wordpress.org/news/2025/12/gene/</link>
+      <guid isPermaLink="false">https://wordpress.org/news/?p=19398</guid>
+      <pubDate>Tue, 02 Dec 2025 20:12:21 +0000</pubDate>
+      <description>WordPress 6.9, code-named &#34;Gene,&#34; brings major upgrades to how teams collaborate and create. The Notes feature introduces block-level commenting to streamline reviewing and polishing content, navigating across the entire dashboard with the Command Palette is now faster for power users, and the new Abilities API provides a standardized way to open the door for AI-powered and automated workflows. Combined with all the performance and accessibility improvements, 6.9 is one to write home about.</description>
+    </item>
   </channel>
 </rss>
