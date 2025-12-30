@@ -1,9 +1,2 @@
 [
-  {
-    "id": "https://wordpress.org/news/?p=19398",
-    "title": "WordPress 6.9 “Gene”",
-    "link": "https://wordpress.org/news/2025/12/gene/",
-    "content": "\u003cp\u003e\u003cstrong\u003eWordPress 6.9 is here!\u003c/strong\u003e\u003c/p\u003e\u003cp\u003eA major upgrade for team collaboration and content creation.\u003c/p\u003e\u003cul\u003e\u003cli\u003e\u003cstrong\u003eNotes Feature:\u003c/strong\u003e Introduces block-level commenting for streamlined reviewing and polishing content.\u003c/li\u003e\u003c/ul\u003e\u003cul\u003e\u003cli\u003e\u003cstrong\u003eCommand Palette:\u003c/strong\u003e Faster navigation across the dashboard for power users.\u003c/li\u003e\u003c/ul\u003e\u003cul\u003e\u003cli\u003e\u003cstrong\u003eAbilities API:\u003c/strong\u003e Standardized way to enable AI-powered and automated workflows.\u003c/li\u003e\u003c/ul\u003e",
-    "created_at": "2025-12-02T20:12:21Z"
-  }
 ]
