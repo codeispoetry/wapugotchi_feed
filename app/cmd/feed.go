@@ -156,19 +156,40 @@ func feedPaths(root string) paths {
 }
 
 func getLatestWordPress() (WordPressItem, error) {
-	resp, err := http.Get(wordpressFeedURL)
-	if err != nil {
-		return WordPressItem{}, err
-	}
-	defer resp.Body.Close()
+	client := &http.Client{Timeout: 15 * time.Second}
 
-	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return WordPressItem{}, fmt.Errorf("wordpress api status: %s", resp.Status)
-	}
+	var body []byte
+	for attempt := 0; attempt < 2; attempt++ {
+		req, err := http.NewRequest(http.MethodGet, wordpressFeedURL, nil)
+		if err != nil {
+			return WordPressItem{}, err
+		}
+		req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+		req.Header.Set("Accept", "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.7")
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return WordPressItem{}, err
+		resp, err := client.Do(req)
+		if err != nil {
+			return WordPressItem{}, err
+		}
+
+		if resp.StatusCode == http.StatusTooManyRequests && attempt == 0 {
+			_, _ = io.Copy(io.Discard, resp.Body)
+			resp.Body.Close()
+			time.Sleep(2 * time.Second)
+			continue
+		}
+
+		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+			resp.Body.Close()
+			return WordPressItem{}, fmt.Errorf("wordpress api status: %s", resp.Status)
+		}
+
+		body, err = io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if err != nil {
+			return WordPressItem{}, err
+		}
+		break
 	}
 
 	var feed WordPressFeed
