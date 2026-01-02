@@ -127,7 +127,7 @@ func RunFeedUpdate() error {
 		})
 	}
 
-	//writeJSON(paths.state, state)
+	writeJSON(paths.state, state)
 	writeJSON(paths.entries, entries)
 
 	if err := buildFeed(site, entries, paths.feed); err != nil {
