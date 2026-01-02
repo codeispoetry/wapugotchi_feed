@@ -306,12 +306,17 @@ func readJSON(path string, target any) {
 }
 
 func writeJSON(path string, value any) {
-	payload, err := json.MarshalIndent(value, "", "  ")
+	file, err := os.Create(path)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	if err := os.WriteFile(path, payload, 0644); err != nil {
+	defer file.Close()
+
+	enc := json.NewEncoder(file)
+	enc.SetIndent("", "  ")
+    enc.SetEscapeHTML(false)
+	if err := enc.Encode(value); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
