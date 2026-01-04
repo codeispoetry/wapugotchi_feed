@@ -59,5 +59,31 @@ func extractFirstIframe(value string) string {
 		return ""
 	}
 	match := iframePattern.FindString(value)
-	return strings.TrimSpace(match)
+	return normalizeIframe(strings.TrimSpace(match))
+}
+
+var (
+	iframeWidthPattern  = regexp.MustCompile(`(?i)\swidth\s*=\s*(['"]?)[^'"\s>]*\1`)
+	iframeHeightPattern = regexp.MustCompile(`(?i)\sheight\s*=\s*(['"]?)[^'"\s>]*\1`)
+)
+
+func normalizeIframe(value string) string {
+	if value == "" {
+		return ""
+	}
+	tagEnd := strings.Index(value, ">")
+	if tagEnd == -1 {
+		return value
+	}
+	openTag := value[:tagEnd]
+	rest := value[tagEnd:]
+
+	openTag = iframeWidthPattern.ReplaceAllString(openTag, "")
+	openTag = iframeHeightPattern.ReplaceAllString(openTag, "")
+	openTag = strings.TrimSpace(openTag)
+	if !strings.HasSuffix(openTag, "<iframe") && !strings.Contains(openTag, "<iframe") {
+		return value
+	}
+	openTag = openTag + ` width="100%" height="auto"`
+	return openTag + rest
 }
