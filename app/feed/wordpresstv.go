@@ -66,6 +66,8 @@ func pickContentEncoded(encoded, description string) string {
 var (
 	iframeWidthPattern  = regexp.MustCompile(`(?i)\swidth\s*=\s*(?:"[^"]*"|'[^']*'|[^'"\s>]+)`)
 	iframeHeightPattern = regexp.MustCompile(`(?i)\sheight\s*=\s*(?:"[^"]*"|'[^']*'|[^'"\s>]+)`)
+	iframeAllowPattern  = regexp.MustCompile(`(?i)\sallow\s*=\s*(?:"[^"]*"|'[^']*'|[^'"\s>]+)`)
+	anchorBlockPattern  = regexp.MustCompile(`(?is)<a\b[^>]*>.*?</a>`)
 	anchorTagPattern    = regexp.MustCompile(`(?is)</?a\b[^>]*>`)
 )
 
@@ -85,6 +87,7 @@ func normalizeIframe(value string) string {
 	}
 	openTag = setAttr(openTag, "width", "100%", iframeWidthPattern)
 	openTag = setAttr(openTag, "height", "auto", iframeHeightPattern)
+	openTag = setAttr(openTag, "allow", "autoplay; fullscreen; encrypted-media", iframeAllowPattern)
 	return openTag + rest
 }
 
@@ -109,5 +112,6 @@ func stripAnchorTags(content string) string {
 	if content == "" {
 		return content
 	}
-	return anchorTagPattern.ReplaceAllString(content, "")
+	withoutBlocks := anchorBlockPattern.ReplaceAllString(content, "")
+	return anchorTagPattern.ReplaceAllString(withoutBlocks, "")
 }
