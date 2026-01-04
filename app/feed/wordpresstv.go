@@ -47,25 +47,26 @@ func LatestWordPressTV(fetch func(url, source string) ([]byte, error)) (Item, er
 		Link:        item.Link,
 		GUID:        item.GUID,
 		PubDate:     item.PubDate,
-		Description: extractFirstIframe(item.ContentEncoded),
+		Description: pickContentEncoded(item.ContentEncoded, item.Description),
 		Categories:  item.Categories,
 	}, nil
 }
 
 var iframePattern = regexp.MustCompile(`(?is)<iframe\b[^>]*>.*?</iframe>`)
 
-func extractFirstIframe(value string) string {
-	value = strings.TrimSpace(value)
-	if value == "" {
-		return ""
+func pickContentEncoded(encoded, description string) string {
+	encoded = strings.TrimSpace(encoded)
+	if encoded == "" {
+		return stripAnchorTags(strings.TrimSpace(description))
 	}
-	match := iframePattern.FindString(value)
-	return normalizeIframe(strings.TrimSpace(match))
+	normalized := normalizeFirstIframe(encoded)
+	return stripAnchorTags(normalized)
 }
 
 var (
 	iframeWidthPattern  = regexp.MustCompile(`(?i)\swidth\s*=\s*(?:"[^"]*"|'[^']*'|[^'"\s>]+)`)
 	iframeHeightPattern = regexp.MustCompile(`(?i)\sheight\s*=\s*(?:"[^"]*"|'[^']*'|[^'"\s>]+)`)
+	anchorTagPattern    = regexp.MustCompile(`(?is)</?a\b[^>]*>`)
 )
 
 func normalizeIframe(value string) string {
@@ -93,4 +94,20 @@ func setAttr(openTag, name, value string, pattern *regexp.Regexp) string {
 		return pattern.ReplaceAllString(openTag, attr)
 	}
 	return strings.TrimSpace(openTag) + attr
+}
+
+func normalizeFirstIframe(content string) string {
+	match := iframePattern.FindString(content)
+	if strings.TrimSpace(match) == "" {
+		return content
+	}
+	normalized := normalizeIframe(match)
+	return strings.Replace(content, match, normalized, 1)
+}
+
+func stripAnchorTags(content string) string {
+	if content == "" {
+		return content
+	}
+	return anchorTagPattern.ReplaceAllString(content, "")
 }
