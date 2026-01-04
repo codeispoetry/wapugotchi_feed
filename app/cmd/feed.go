@@ -12,9 +12,9 @@ import (
 	"sort"
 	"strings"
 	"time"
-)
 
-const wordpressFeedURL = "https://wordpress.org/news/category/releases/feed/"
+	"wapuugotchi/feed/app/feed"
+)
 
 type Site struct {
 	Title       string `json:"title"`
@@ -32,26 +32,7 @@ type Entry struct {
 }
 
 type State struct {
-	WordPressLatestTitle   string `json:"wordpress_latest_title"`
-	WordPressLatestLink    string `json:"wordpress_latest_link"`
-	WordPressLatestPubDate string `json:"wordpress_latest_pub_date"`
-}
-
-type WordPressFeed struct {
-	Channel WordPressChannel `xml:"channel"`
-}
-
-type WordPressChannel struct {
-	Items []WordPressItem `xml:"item"`
-}
-
-type WordPressItem struct {
-	Title       string   `xml:"title"`
-	Link        string   `xml:"link"`
-	GUID        string   `xml:"guid"`
-	PubDate     string   `xml:"pubDate"`
-	Description string   `xml:"description"`
-	Categories  []string `xml:"category"`
+	Latest map[string]string `json:"latest,omitempty"`
 }
 
 type RSS struct {
@@ -77,6 +58,11 @@ type Item struct {
 	Categories  []string `xml:"category,omitempty"`
 }
 
+const (
+	userAgent    = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+	acceptHeader = "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.7"
+)
+
 func RunFeedUpdate() error {
 	root, err := os.Getwd()
 	if err != nil {
@@ -91,41 +77,32 @@ func RunFeedUpdate() error {
 	readJSON(paths.site, &site)
 	readJSON(paths.state, &state)
 	readJSON(paths.entries, &entries)
-
-	latest, err := getLatestWordPress()
-	if err != nil {
-		return err
+	if state.Latest == nil {
+		state.Latest = map[string]string{}
 	}
 
-	if latest.Title == "" || latest.Title == state.WordPressLatestTitle {
-		fmt.Println("no update detected")
-		return nil
-	}
-
-	text := strings.TrimSpace(latest.Description)
-	if text != "" {
-		translated, err := TransformTextByAi(text)
+	updated := false
+	var firstErr error
+	for _, provider := range feedProviders() {
+		added, err := addLatestFromProvider(provider, &entries, &state)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "translation failed:", err)
-		} else {
-			text = translated
+			if firstErr == nil {
+				firstErr = err
+			}
+			fmt.Fprintln(os.Stderr, err)
+			continue
+		}
+		if added {
+			updated = true
 		}
 	}
 
-	state.WordPressLatestTitle = latest.Title
-	state.WordPressLatestLink = latest.Link
-	state.WordPressLatestPubDate = latest.PubDate
-	createdAt := pickEntryTime(latest)
-	id := pickEntryID(latest)
-	if !idExists(entries, id) {
-		entries = append(entries, Entry{
-			ID:         id,
-			Title:      latest.Title,
-			Link:       latest.Link,
-			Content:    text,
-			CreatedAt:  createdAt,
-			Categories: latest.Categories,
-		})
+	if !updated && firstErr != nil {
+		return firstErr
+	}
+	if !updated {
+		fmt.Println("no update detected")
+		return nil
 	}
 
 	writeJSON(paths.state, state)
@@ -156,21 +133,79 @@ func feedPaths(root string) paths {
 	}
 }
 
-func getLatestWordPress() (WordPressItem, error) {
+type feedProvider struct {
+	Name      string
+	Translate bool
+	Fetch     func(fetch func(url, source string) ([]byte, error)) (feed.Item, error)
+}
+
+func feedProviders() []feedProvider {
+	return []feedProvider{
+		{Name: "wordpress-releases", Translate: true, Fetch: feed.LatestReleases},
+		{Name: "wordpress-tv", Translate: false, Fetch: feed.LatestWordPressTV},
+		{Name: "wordpress-com", Translate: false, Fetch: feed.LatestWordPressComBlog},
+	}
+}
+
+func addLatestFromProvider(provider feedProvider, entries *[]Entry, state *State) (bool, error) {
+	item, err := provider.Fetch(fetchFeed)
+	if err != nil {
+		return false, err
+	}
+	if strings.TrimSpace(item.Title) == "" {
+		return false, nil
+	}
+
+	item.Categories = cleanCategories(item.Categories)
+	id := pickEntryID(provider.Name, item)
+	if idExists(*entries, id) {
+		state.Latest[provider.Name] = id
+		return false, nil
+	}
+
+	text := translateContent(item.Description, provider.Translate)
+	*entries = append(*entries, Entry{
+		ID:         id,
+		Title:      item.Title,
+		Link:       item.Link,
+		Content:    text,
+		CreatedAt:  pickEntryTime(item),
+		Categories: item.Categories,
+	})
+
+	state.Latest[provider.Name] = id
+	return true, nil
+}
+
+func translateContent(text string, allow bool) string {
+	text = strings.TrimSpace(text)
+	if text == "" || !allow || strings.Contains(strings.ToLower(text), "<iframe") {
+		return text
+	}
+
+	translated, err := TransformTextByAi(text)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "translation failed:", err)
+		return text
+	}
+	return translated
+}
+
+func fetchFeed(url, source string) ([]byte, error) {
 	client := &http.Client{Timeout: 15 * time.Second}
 
 	var body []byte
 	for attempt := 0; attempt < 2; attempt++ {
-		req, err := http.NewRequest(http.MethodGet, wordpressFeedURL, nil)
+		req, err := http.NewRequest(http.MethodGet, url, nil)
 		if err != nil {
-			return WordPressItem{}, err
+			return nil, err
 		}
-		req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-		req.Header.Set("Accept", "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.7")
+		req.Header.Set("User-Agent", userAgent)
+		req.Header.Set("Accept", acceptHeader)
 
 		resp, err := client.Do(req)
 		if err != nil {
-			return WordPressItem{}, err
+			return nil, err
 		}
 
 		if resp.StatusCode == http.StatusTooManyRequests && attempt == 0 {
@@ -182,25 +217,30 @@ func getLatestWordPress() (WordPressItem, error) {
 
 		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 			resp.Body.Close()
-			return WordPressItem{}, fmt.Errorf("wordpress api status: %s", resp.Status)
+			return nil, fmt.Errorf("%s api status: %s", source, resp.Status)
 		}
 
 		body, err = io.ReadAll(resp.Body)
 		resp.Body.Close()
 		if err != nil {
-			return WordPressItem{}, err
+			return nil, err
 		}
 		break
 	}
 
-	var feed WordPressFeed
-	if err := xml.Unmarshal(body, &feed); err != nil {
-		return WordPressItem{}, err
+	return body, nil
+}
+
+func cleanCategories(values []string) []string {
+	result := make([]string, 0, len(values))
+	for _, value := range values {
+		value = strings.TrimSpace(value)
+		if value == "" {
+			continue
+		}
+		result = append(result, value)
 	}
-	if len(feed.Channel.Items) == 0 {
-		return WordPressItem{}, nil
-	}
-	return feed.Channel.Items[0], nil
+	return result
 }
 
 func buildFeed(site Site, entries []Entry, outputPath string) error {
@@ -257,18 +297,21 @@ func buildFeed(site Site, entries []Entry, outputPath string) error {
 }
 
 func parseTime(value string) (time.Time, error) {
-	value = strings.TrimSpace(value)
-	if strings.HasSuffix(value, "Z") {
-		return time.Parse(time.RFC3339, value)
+	return time.Parse(time.RFC3339, strings.TrimSpace(value))
+}
+
+func pickEntryID(provider string, item feed.Item) string {
+	base := strings.TrimSpace(item.PubDate)
+	if base == "" {
+		base = strings.TrimSpace(item.Link)
 	}
-	return time.Parse(time.RFC3339, value)
+	if base == "" {
+		base = fmt.Sprintf("%s-%d", provider, time.Now().UnixNano())
+	}
+	return hashString(provider + "|" + base)
 }
 
-func pickEntryID(item WordPressItem) string {
-	return hashPubDate(item.PubDate)
-}
-
-func pickEntryTime(item WordPressItem) string {
+func pickEntryTime(item feed.Item) string {
 	parsed, err := parsePubDate(item.PubDate)
 	if err != nil {
 		return time.Now().UTC().Format(time.RFC3339)
@@ -296,10 +339,10 @@ func parsePubDate(value string) (time.Time, error) {
 	return time.Parse(time.RFC1123, value)
 }
 
-func hashPubDate(value string) string {
+func hashString(value string) string {
 	value = strings.TrimSpace(value)
 	if value == "" {
-		return fmt.Sprintf("pubdate-%d", time.Now().UnixNano())
+		return fmt.Sprintf("hash-%d", time.Now().UnixNano())
 	}
 	sum := md5.Sum([]byte(value))
 	return fmt.Sprintf("%x", sum)

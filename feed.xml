@@ -4,13 +4,35 @@
     <title>Wapuugotchi RSS</title>
     <link>https://wapuugotchi.github.io/feed/</link>
     <description>Automatisierte Updates und Checks als RSS Feed.</description>
-    <lastBuildDate>Tue, 02 Dec 2025 20:12:21 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 03 Jan 2026 16:57:31 +0000</lastBuildDate>
     <item>
-      <id>df2791d2064ddc0223aa3b9fd4e97c5a</id>
+      <id>5af11cb112f1516b765ef160331e2f99</id>
+      <title>Marina Di Candia &amp; WordPress Credits: my experience</title>
+      <link>https://wordpress.tv/2026/01/03/marina-di-candia-wordpress-credits-la-mia-esperienza/</link>
+      <pubDate>Sat, 03 Jan 2026 16:57:31 +0000</pubDate>
+      <description>&lt;iframe title=&#39;VideoPress Video Player&#39; aria-label=&#39;VideoPress Video Player&#39; width=&#39;400&#39; height=&#39;224&#39; src=&#39;https://video.wordpress.com/embed/rFLkDtYY?hd=1&amp;amp;autoPlay=0&amp;amp;permalink=1&amp;amp;loop=0&amp;amp;preloadContent=metadata&amp;amp;muted=0&amp;amp;playsinline=0&amp;amp;controls=1&amp;amp;cover=1&#39; frameborder=&#39;0&#39; allowfullscreen  allow=&#39;clipboard-write&#39; &gt;&lt;/iframe&gt;</description>
+      <category>2025</category>
+      <category>Italy</category>
+      <category>WordCampTV</category>
+      <category>WPCredits</category>
+    </item>
+    <item>
+      <id>24a6e868b5687a38fc13d069033ff020</id>
+      <title>Is WordPress Free? Yes and No — Here’s Why</title>
+      <link>https://wordpress.com/blog/2025/12/23/is-wordpress-free/</link>
+      <pubDate>Tue, 23 Dec 2025 16:00:00 +0000</pubDate>
+      <description>There&#39;s a lot of confusion surrounding WordPress&#39;s pricing. Here&#39;s a breakdown of what&#39;s free, as well as the costs of running a fully functional website.</description>
+      <category>Tips and Tutorials</category>
+      <category>Website Design</category>
+      <category>WordPress</category>
+      <category>wordpress-com</category>
+    </item>
+    <item>
+      <id>1c8774ef61e2d9adf36fbaba94234bd8</id>
       <title>WordPress 6.9 “Gene”</title>
       <link>https://wordpress.org/news/2025/12/gene/</link>
       <pubDate>Tue, 02 Dec 2025 20:12:21 +0000</pubDate>
-      <description>&lt;p&gt;&lt;strong&gt;WordPress 6.9 is here!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;A major collaboration and creation upgrade.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Notes Feature:&lt;/strong&gt; Introduces block-level commenting to streamline reviewing and polishing content.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Command Palette:&lt;/strong&gt; Now faster for power users.&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Abilities API:&lt;/strong&gt; Provides a standardized way to open the door for AI-powered and automated workflows.&lt;/li&gt;&lt;/ul&gt;</description>
+      <description>&lt;p&gt;&lt;strong&gt;WordPress 6.9 is here!&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;Major upgrades for team collaboration and content creation.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;strong&gt;Notes: Block-level commenting&lt;/strong&gt; Streamline reviewing and polishing content&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Command Palette: Faster navigation&lt;/strong&gt; Navigating across the dashboard is now faster&lt;/li&gt;&lt;li&gt;&lt;strong&gt;Abilities API: AI-powered workflows&lt;/strong&gt; Open the door for AI-powered and automated workflows&lt;/li&gt;&lt;/ul&gt;</description>
       <category>General</category>
       <category>Releases</category>
       <category>6.9</category>
