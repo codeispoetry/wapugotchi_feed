@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"crypto/md5"
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
@@ -11,8 +12,6 @@ import (
 	"sort"
 	"strings"
 	"time"
-
-	"github.com/google/uuid"
 )
 
 const wordpressFeedURL = "https://wordpress.org/news/category/releases/feed/"
@@ -119,9 +118,10 @@ func RunFeedUpdate() error {
 	state.WordPressLatestLink = latest.Link
 	state.WordPressLatestPubDate = latest.PubDate
 	createdAt := pickEntryTime(latest)
-	if !createdAtExists(entries, createdAt) {
+	id := pickEntryID(latest)
+	if !idExists(entries, id) {
 		entries = append(entries, Entry{
-			ID:        pickEntryID(latest),
+			ID:        id,
 			Title:     latest.Title,
 			Link:      latest.Link,
 			Content:   text,
@@ -265,7 +265,7 @@ func parseTime(value string) (time.Time, error) {
 }
 
 func pickEntryID(item WordPressItem) string {
-	return uuid.NewString()
+	return hashPubDate(item.PubDate)
 }
 
 func pickEntryTime(item WordPressItem) string {
@@ -276,9 +276,9 @@ func pickEntryTime(item WordPressItem) string {
 	return parsed.UTC().Format(time.RFC3339)
 }
 
-func createdAtExists(entries []Entry, createdAt string) bool {
+func idExists(entries []Entry, id string) bool {
 	for _, entry := range entries {
-		if entry.CreatedAt == createdAt {
+		if entry.ID == id {
 			return true
 		}
 	}
@@ -294,6 +294,15 @@ func parsePubDate(value string) (time.Time, error) {
 		return parsed, nil
 	}
 	return time.Parse(time.RFC1123, value)
+}
+
+func hashPubDate(value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return fmt.Sprintf("pubdate-%d", time.Now().UnixNano())
+	}
+	sum := md5.Sum([]byte(value))
+	return fmt.Sprintf("%x", sum)
 }
 
 func readJSON(path string, target any) {
