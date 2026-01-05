@@ -50,7 +50,7 @@ func LatestWordPressTV(fetch func(url, source string) ([]byte, error)) (Item, er
 	}
 
 	item := feed.Channel.Items[0]
-	content := buildWordPressTVContent(item.ContentEncoded, item.Description)
+	content := buildWordPressTVContent(item.Title, item.Description, item.ContentEncoded)
 	return Item{
 		Title:      item.Title,
 		Link:       item.Link,
@@ -60,13 +60,25 @@ func LatestWordPressTV(fetch func(url, source string) ([]byte, error)) (Item, er
 	}, nil
 }
 
-func buildWordPressTVContent(encoded, description string) string {
+func buildWordPressTVContent(title, description, encoded string) string {
+	title = strings.TrimSpace(title)
+	description = stripAnchorTags(strings.TrimSpace(description))
 	encoded = strings.TrimSpace(encoded)
-	if encoded == "" {
-		return stripAnchorTags(strings.TrimSpace(description))
+
+	header := ""
+	if title != "" {
+		header = fmt.Sprintf("<p><strong>%s</strong></p>", title)
 	}
+	if description != "" {
+		header += fmt.Sprintf("<p>%s</p>", description)
+	}
+
+	if encoded == "" {
+		return header
+	}
+
 	normalized := normalizeFirstIframe(encoded)
-	return stripAnchorTags(normalized)
+	return header + stripAnchorTags(normalized)
 }
 
 func normalizeFirstIframe(content string) string {

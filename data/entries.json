@@ -3,7 +3,7 @@
     "id": "1c8774ef61e2d9adf36fbaba94234bd8",
     "title": "WordPress 6.9 “Gene”",
     "link": "https://wordpress.org/news/2025/12/gene/",
-    "content": "<p><strong>WordPress 6.9 is here!</strong></p><p>Major upgrades for team collaboration and content creation.</p><ul><li><strong>Notes feature:</strong> Introduces block-level commenting to streamline reviewing and polishing content.</li><li><strong>Command Palette:</strong> Now faster for power users.</li><li><strong>Abilities API:</strong> Provides a standardized way to open the door for AI-powered and automated workflows.</li></ul>",
+    "content": "<p><strong>WordPress 6.9 is here!</strong></p><p>Major upgrades for team collaboration and content creation.</p><ul><li><strong>Notes Feature:</strong> Introduces block-level commenting to streamline reviewing and polishing content.</li><li><strong>Command Palette:</strong> Now faster for power users.</li><li><strong>Abilities API:</strong> Provides a standardized way to open the door for AI-powered and automated workflows.</li></ul>",
     "created_at": "2025-12-02T20:12:21Z",
     "categories": [
       "General",
@@ -16,7 +16,7 @@
     "id": "5af11cb112f1516b765ef160331e2f99",
     "title": "Marina Di Candia & WordPress Credits: my experience",
     "link": "https://wordpress.tv/2026/01/03/marina-di-candia-wordpress-credits-la-mia-esperienza/",
-    "content": "<iframe title='VideoPress Video Player' aria-label='VideoPress Video Player' width=\"100%\" height=\"auto\" src='https://video.wordpress.com/embed/rFLkDtYY?hd=1&amp;autoPlay=0&amp;permalink=1&amp;loop=0&amp;preloadContent=metadata&amp;muted=0&amp;playsinline=0&amp;controls=1&amp;cover=1' frameborder='0' allowfullscreen  allow=\"autoplay; fullscreen; encrypted-media\" ></iframe><script src='https://v0.wordpress.com/js/next/videopress-iframe.js?m=1739540970'></script>\n<div></div>",
+    "content": "<p><strong>Marina Di Candia & WordPress Credits: my experience</strong></p><p>Presentation about my Wordpress Credits Program experience.</p><iframe title='VideoPress Video Player' aria-label='VideoPress Video Player' width=\"100%\" height=\"auto\" src='https://video.wordpress.com/embed/rFLkDtYY?hd=1&amp;autoPlay=0&amp;permalink=1&amp;loop=0&amp;preloadContent=metadata&amp;muted=0&amp;playsinline=0&amp;controls=1&amp;cover=1' frameborder='0' allowfullscreen  allow=\"autoplay; fullscreen; encrypted-media\" ></iframe><script src='https://v0.wordpress.com/js/next/videopress-iframe.js?m=1739540970'></script>\n<div></div>",
     "created_at": "2026-01-03T16:57:31Z",
     "categories": [
       "2025",
@@ -29,7 +29,7 @@
     "id": "24a6e868b5687a38fc13d069033ff020",
     "title": "Is WordPress Free? Yes and No — Here’s Why",
     "link": "https://wordpress.com/blog/2025/12/23/is-wordpress-free/",
-    "content": "<p><strong>Is WordPress Free? Yes and No — Here’s Why</strong></p><p>WordPress itself is free and open source, but getting a site online involves costs like a domain and hosting. The free WordPress software includes access to the website builder, hundreds of free themes and plugins, and the ability to export and reuse site files. However, running a fully functional website always incurs costs, including domain names, web hosting, premium plugins and themes, and development and maintenance costs.</p>",
+    "content": "<p><strong>Is WordPress Free? Yes and No — Here’s Why</strong></p><p>WordPress itself is free and open-source, but running a full website involves costs such as a domain and hosting. The free WordPress software includes access to the website builder, hundreds of free themes and plugins, and the ability to export and reuse site files. However, costs arise from domain names, web hosting, premium plugins and themes, and development and maintenance costs.</p>",
     "created_at": "2025-12-23T16:00:00Z",
     "categories": [
       "Tips and Tutorials",
