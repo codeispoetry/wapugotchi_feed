@@ -1,23 +1,10 @@
 [
   {
-    "id": "1c8774ef61e2d9adf36fbaba94234bd8",
-    "title": "WordPress 6.9 “Gene”",
-    "link": "https://wordpress.org/news/2025/12/gene/",
-    "content": "<p><strong>WordPress 6.9 is here!</strong></p><p>Major upgrades for team collaboration and content creation.</p><ul><li><strong>Notes feature:</strong> Introduces block-level commenting to streamline reviewing and polishing content.</li><li><strong>Command Palette:</strong> Now faster for power users.</li><li><strong>Abilities API:</strong> Provides a standardized way to open the door for AI-powered and automated workflows.</li></ul>",
-    "created_at": "2025-12-02T20:12:21Z",
-    "categories": [
-      "General",
-      "Releases",
-      "6.9",
-      "releases"
-    ]
-  },
-  {
     "id": "d4b2c8a1f0e34a6b9d7c1e2f3a4b5c6d",
     "title": "Learn WordPress for Designers",
     "link": "https://learn.wordpress.org/course/beginner-wordpress-designer",
     "content": "<p><strong>Did you know… 🤓</strong></p><p>…Learn WordPress has a dedicated learning path especially for designers?</p><p>It gently guides you through blocks, patterns, and the Site Editor, helping you turn creative ideas into real WordPress websites step by step.</p><iframe title='YouTube Video Player' aria-label='YouTube Video Player' width=\"100%\" height=\"auto\" src='https://www.youtube.com/embed/FcTLMTyD2DU?feature=oembed' frameborder='0' allowfullscreen allow=\"autoplay; fullscreen; encrypted-media\"></iframe><div></div>",
-    "created_at": "2026-01-05T20:14:28Z",
+    "created_at": "2025-12-01T20:12:21Z",
     "categories": [
       "LearnWordPress",
       "Design",
@@ -30,7 +17,7 @@
     "title": "WordPress and the future of AI",
     "link": "https://wordpress.org/news/2025/12/sotw-2025/",
     "content": "<p><strong>Did you know… 🤓</strong></p><p>…artificial intelligence is becoming a foundational topic within the WordPress project?</p><p>New APIs and standards are being developed to allow AI tools to interact with WordPress in a structured, predictable, and responsible way.</p><iframe title='YouTube Video Player' aria-label='YouTube Video Player' width=\"100%\" height=\"auto\" src='https://www.youtube.com/embed/U_DF4-23C8Q?feature=oembed' frameborder='0' allowfullscreen allow=\"autoplay; fullscreen; encrypted-media\"></iframe><div></div>",
-    "created_at": "2026-01-05T20:14:28Z",
+    "created_at": "2025-12-01T20:12:21Z",
     "categories": [
       "2025",
       "StateOfTheWord",
@@ -44,7 +31,7 @@
     "title": "WordPress isn’t just software",
     "link": "https://wordpress.tv/event/wordcamp-europe-2025/",
     "content": "<p><strong>Did you know… 🤓</strong></<p><p>…there are large WordPress events around the world where enthusiasts meet and learn from each other?</p><p>Conferences like <strong>WordCamp Europe</strong>, <strong>WordCamp US</strong>, and <strong>WordCamp Asia</strong> bring the global WordPress community together in person.</p><iframe title='VideoPress Video Player' aria-label='VideoPress Video Player' width=\"100%\" height=\"auto\" src='https://video.wordpress.com/embed/zVmqygRk?hd=1&autoPlay=0&permalink=1&loop=0&preloadContent=metadata&muted=0&playsinline=0&controls=1&cover=1' frameborder='0' allowfullscreen  allow=\"autoplay; fullscreen; encrypted-media\" ></iframe><script src='https://v0.wordpress.com/js/next/videopress-iframe.js?m=1739540970'></script><div></div>",
-    "created_at": "2026-01-05T20:14:28Z",
+    "created_at": "2025-12-01T20:12:21Z",
     "categories": [
       "2025",
       "WordCampTV",
@@ -58,13 +45,26 @@
     "title": "WordPress powers the open web",
     "link": "https://wordpress.org/news/2025/12/sotw-2025/",
     "content": "<p><strong>Did you know… 🤓</strong></p><p>…WordPress now powers more than 43% of all websites worldwide, making it the most widely used content management system on the internet?</p><p>This scale is the result of nearly two decades of open-source development and a global community continuously improving the platform.</p><iframe title='YouTube Video Player' aria-label='YouTube Video Player' width=\"100%\" height=\"auto\" src='https://www.youtube.com/embed/U_DF4-23C8Q?feature=oembed' frameborder='0' allowfullscreen allow=\"autoplay; fullscreen; encrypted-media\"></iframe><div></div>",
-    "created_at": "2026-01-05T20:14:28Z",
+    "created_at": "2025-12-01T20:12:21Z",
     "categories": [
       "2025",
       "StateOfTheWord",
       "WordPress",
       "OpenWeb",
       "DidYouKnow"
+    ]
+  },
+  {
+    "id": "1c8774ef61e2d9adf36fbaba94234bd8",
+    "title": "WordPress 6.9 “Gene”",
+    "link": "https://wordpress.org/news/2025/12/gene/",
+    "content": "<p><strong>WordPress 6.9 is here!</strong></p><p>Major upgrades for team collaboration and content creation.</p><ul><li><strong>Notes feature:</strong> Introduces block-level commenting to streamline reviewing and polishing content.</li><li><strong>Command Palette:</strong> Now faster for power users.</li><li><strong>Abilities API:</strong> Provides a standardized way to open the door for AI-powered and automated workflows.</li></ul>",
+    "created_at": "2025-12-02T20:12:21Z",
+    "categories": [
+      "General",
+      "Releases",
+      "6.9",
+      "releases"
     ]
   }
 ]
