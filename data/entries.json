@@ -42,6 +42,19 @@
     ]
   },
   {
+    "id": "d4b2c8a1f0e34a6b9d7c1e2f3a4b5c6d",
+    "title": "Learn WordPress for Designers",
+    "link": "https://learn.wordpress.org/course/beginner-wordpress-designer",
+    "content": "<p><strong>Did you know… 🤓</strong></p><p>…Learn WordPress has a dedicated learning path especially for designers?</p><p>It gently guides you through blocks, patterns, and the Site Editor, helping you turn creative ideas into real WordPress websites step by step.</p><iframe title='YouTube Video Player' aria-label='YouTube Video Player' width=\"100%\" height=\"auto\" src='https://www.youtube.com/embed/FcTLMTyD2DU?feature=oembed' frameborder='0' allowfullscreen allow=\"autoplay; fullscreen; encrypted-media\"></iframe><div></div>",
+    "created_at": "2026-01-05T20:14:28Z",
+    "categories": [
+      "LearnWordPress",
+      "Design",
+      "Course",
+      "DidYouKnow"
+    ]
+  },
+  {
     "id": "1c8774ef61e2d9adf36fbaba94234bd8",
     "title": "WordPress 6.9 “Gene”",
     "link": "https://wordpress.org/news/2025/12/gene/",
